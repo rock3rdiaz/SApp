@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="user_name" />
+        <cc:attribute name="area_name" />
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <h:outputLabel class="pull-left"
+                       value="Bienvenido #{cc.attrs.user_name}!, j&eacute;fe del &aacute;rea de #{cc.attrs.area_name}"/>
+
+        <h:outputLink class="pull-right">Salir</h:outputLink>  
+    </cc:implementation>
+
+</html>

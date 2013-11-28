@@ -1,0 +1,20 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 28/11/2013, 08:29:16 AM
+    Author     : rockerW7
+*/
+
+body{
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 50px;
+}
+
+/* Modificacion del ancho del menu para que abarque todo el tamaño de la columna boostrap */
+.ui-menu{
+    width: auto !important;
+}
