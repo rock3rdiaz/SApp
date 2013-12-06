@@ -18,7 +18,7 @@ import org.primefaces.model.menu.MenuModel;
  *
  * @author rockerW7
  */
-@Named(value = "menuBeanAdmin")
+@Named
 @RequestScoped
 public class MenuBeanAdmin {
 
@@ -51,7 +51,7 @@ public class MenuBeanAdmin {
 
         DefaultMenuItem item = new DefaultMenuItem("Listar cuenta de usuario");
         item.setIcon("ui-icon-plus");        
-        item.setUrl("listUserAccount.xhtml");
+        item.setUrl("./userAccounts/list.xhtml");
         item.setAjax(true);
         userAccounts.addElement(item);
 

@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../WEB-INF/facelets/templates/mainTemplate.xhtml"
+                xmlns:ezcomp="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="welcomeMessage">
+        <!-- Mensage de bienvenida autoconfigurable -->
+        <ezcomp:welcomeMessage 
+            user_name="rocker" 
+            area_name="vivienda" />
+    </ui:define>
+
+    <ui:define name="menu">
+        <h:form>  
+
+            <p:growl id="messages"/> 
+
+            <p:menu model="#{menuBeanAdmin.model}"/>  
+
+        </h:form> 
+    </ui:define>
+
+    <ui:define name="content">
+
+        <h:form>  
+            <p:dataTable var="userAccounts" value="#{userAccountController.userAccounts}"
+                         paginator="true" rows="10"
+                         editable="true" editMode="cell">  
+
+                <f:facet name="header">  
+                    Listado de cuentas de usuario  
+                </f:facet>  
+
+                <p:column headerText="Nombre de usuario"
+                          sortBy="username">  
+                    <h:outputText value="#{userAccounts.username}" />  
+                </p:column>  
+
+                <p:column headerText="Contraseña">  
+                    <h:outputText value="#{userAccounts.passwd}" />  
+                </p:column>  
+
+                <p:column headerText="Perfil">  
+                    <h:outputText value="#{userAccounts.profile}" />  
+                </p:column>  
+
+                <p:column headerText="idUser">  
+                    <h:outputText value="#{userAccounts.idUser}" />  
+                </p:column>  
+
+                <f:facet name="footer">  
+                    En total existen #{userAccountController.userAccounts.size()} cuentas de usuario.  
+                </f:facet> 
+                
+            </p:dataTable>  
+        </h:form> 
+
+    </ui:define>
+
+</ui:composition>

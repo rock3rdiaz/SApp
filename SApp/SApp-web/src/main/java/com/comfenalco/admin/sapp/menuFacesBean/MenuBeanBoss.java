@@ -18,7 +18,7 @@ import org.primefaces.model.menu.MenuModel;
  *
  * @author rockerW7
  */
-@Named(value = "menuBeanBoss")
+@Named
 @RequestScoped
 public class MenuBeanBoss {
 

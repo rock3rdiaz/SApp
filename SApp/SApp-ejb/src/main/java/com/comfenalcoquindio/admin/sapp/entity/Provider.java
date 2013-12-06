@@ -7,7 +7,7 @@
 package com.comfenalcoquindio.admin.sapp.entity;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author rockerW7
  */
 @Entity
-@Table(name = "provider", catalog = "sapp", schema = "")
+@Table(name = "provider")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Provider.findAll", query = "SELECT p FROM Provider p"),
@@ -46,8 +46,8 @@ public class Provider implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "name")
     private String name;
-    @ManyToMany(mappedBy = "providerCollection")
-    private Collection<Product> productCollection;
+    @ManyToMany(mappedBy = "providerList")
+    private List<Product> productList;
 
     public Provider() {
     }
@@ -78,12 +78,12 @@ public class Provider implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Product> getProductCollection() {
-        return productCollection;
+    public List<Product> getProductList() {
+        return productList;
     }
 
-    public void setProductCollection(Collection<Product> productCollection) {
-        this.productCollection = productCollection;
+    public void setProductList(List<Product> productList) {
+        this.productList = productList;
     }
 
     @Override

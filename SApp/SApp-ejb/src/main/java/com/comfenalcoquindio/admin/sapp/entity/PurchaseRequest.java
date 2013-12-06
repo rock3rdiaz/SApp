@@ -7,8 +7,8 @@
 package com.comfenalcoquindio.admin.sapp.entity;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author rockerW7
  */
 @Entity
-@Table(name = "purchase_request", catalog = "sapp", schema = "")
+@Table(name = "purchase_request")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PurchaseRequest.findAll", query = "SELECT p FROM PurchaseRequest p"),
@@ -59,7 +59,7 @@ public class PurchaseRequest implements Serializable {
     @Column(name = "observations")
     private String observations;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "purchaseRequest")
-    private Collection<Order1> order1Collection;
+    private List<Order1> order1List;
     @JoinColumn(name = "area_idarea", referencedColumnName = "idarea")
     @ManyToOne(optional = false)
     private Area areaIdarea;
@@ -102,12 +102,12 @@ public class PurchaseRequest implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Order1> getOrder1Collection() {
-        return order1Collection;
+    public List<Order1> getOrder1List() {
+        return order1List;
     }
 
-    public void setOrder1Collection(Collection<Order1> order1Collection) {
-        this.order1Collection = order1Collection;
+    public void setOrder1List(List<Order1> order1List) {
+        this.order1List = order1List;
     }
 
     public Area getAreaIdarea() {

@@ -14,15 +14,25 @@
     </ui:define>
 
     <ui:define name="content">
-        <p:dataGrid var="userAccount" value="#{exampleBean.users}" columns="4" rows="12">
-            <p:column>
-                <p:panel header="#{userAccount.username}">
-                    <h:panelGrid columns="1">                         
-                        <h:outputText value="#{userAccount.passwd}" />
-                    </h:panelGrid>
-                </p:panel>
-            </p:column>
-        </p:dataGrid> 
+
+        <h:form id="form">  
+
+            <p:dataGrid var="userAccount" value="#{exampleBean.userAccounts}" columns="3"  
+                        rows="12" paginator="true"  
+                        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                        rowsPerPageTemplate="9,12,15">  
+
+                <p:panel header="#{userAccount.username}" style="text-align:center">  
+                    <h:panelGrid columns="1" style="width:100%">  
+
+                        <h:outputText value="#{userAccount.passwd}" />  
+
+                    </h:panelGrid>  
+                </p:panel>  
+
+            </p:dataGrid> 
+        </h:form>
+
     </ui:define>
 
 </ui:composition>

@@ -2,10 +2,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-    <artifactId>SApp</artifactId>
-    <groupId>com.comfenalcoquindio.admin</groupId>
-    <version>1.0</version>
-  </parent>
+        <artifactId>SApp</artifactId>
+        <groupId>com.comfenalcoquindio.admin</groupId>
+        <version>1.0</version>
+    </parent>
 
     <groupId>com.comfenalcoquindio.admin</groupId>
     <artifactId>SApp-ejb</artifactId>
@@ -17,13 +17,21 @@
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        
+        <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <glassfish.embedded-static-shell.jar>
+            C:\Program Files\Application Servers\glassfish-4.0\glassfish\lib\embedded\glassfish-embedded-static-shell.jar
+        </glassfish.embedded-static-shell.jar>
     </properties>
 
     <dependencies>
+        
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.11</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.eclipse.persistence</groupId>
@@ -31,12 +39,24 @@
             <version>2.5.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        
         <dependency>
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>org.eclipse.persistence.jpa.modelgen.processor</artifactId>
             <version>2.5.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        
+        <!-- Dependencia de contenedor embebido para pruebas -->
+        <dependency>
+            <groupId>org.glassfish.extras</groupId>
+            <artifactId>glassfish-embedded-static-shell</artifactId>
+            <version>3.1</version>
+            <scope>system</scope>
+            <systemPath>${glassfish.embedded-static-shell.jar}</systemPath>
+        </dependency>
+        <!---->
+        
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>

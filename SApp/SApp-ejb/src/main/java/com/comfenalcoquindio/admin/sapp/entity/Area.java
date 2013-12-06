@@ -7,7 +7,7 @@
 package com.comfenalcoquindio.admin.sapp.entity;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author rockerW7
  */
 @Entity
-@Table(name = "area", catalog = "sapp", schema = "")
+@Table(name = "area")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Area.findAll", query = "SELECT a FROM Area a"),
@@ -46,7 +46,7 @@ public class Area implements Serializable {
     @Column(name = "name")
     private String name;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "areaIdarea")
-    private Collection<PurchaseRequest> purchaseRequestCollection;
+    private List<PurchaseRequest> purchaseRequestList;
 
     public Area() {
     }
@@ -77,12 +77,12 @@ public class Area implements Serializable {
     }
 
     @XmlTransient
-    public Collection<PurchaseRequest> getPurchaseRequestCollection() {
-        return purchaseRequestCollection;
+    public List<PurchaseRequest> getPurchaseRequestList() {
+        return purchaseRequestList;
     }
 
-    public void setPurchaseRequestCollection(Collection<PurchaseRequest> purchaseRequestCollection) {
-        this.purchaseRequestCollection = purchaseRequestCollection;
+    public void setPurchaseRequestList(List<PurchaseRequest> purchaseRequestList) {
+        this.purchaseRequestList = purchaseRequestList;
     }
 
     @Override

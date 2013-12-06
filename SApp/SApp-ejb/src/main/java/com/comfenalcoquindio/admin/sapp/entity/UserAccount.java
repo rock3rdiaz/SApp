@@ -7,9 +7,7 @@
 package com.comfenalcoquindio.admin.sapp.entity;
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,33 +15,34 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author rockerW7
  */
 @Entity
-@Table(name = "user_account", catalog = "sapp", schema = "")
+@Table(name = "user_account")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "UserAccount.findAll", query = "SELECT u FROM UserAccount u"),
     @NamedQuery(name = "UserAccount.findByIduserAccount", query = "SELECT u FROM UserAccount u WHERE u.iduserAccount = :iduserAccount"),
     @NamedQuery(name = "UserAccount.findByUsername", query = "SELECT u FROM UserAccount u WHERE u.username = :username"),
     @NamedQuery(name = "UserAccount.findByPasswd", query = "SELECT u FROM UserAccount u WHERE u.passwd = :passwd"),
-    @NamedQuery(name = "UserAccount.findByProfile", query = "SELECT u FROM UserAccount u WHERE u.profile = :profile")})
+    @NamedQuery(name = "UserAccount.findByProfile", query = "SELECT u FROM UserAccount u WHERE u.profile = :profile"),
+    @NamedQuery(name = "UserAccount.findByIdUser", query = "SELECT u FROM UserAccount u WHERE u.idUser = :idUser")})
 public class UserAccount implements Serializable {
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "iduser_account")
     private Integer iduserAccount;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -59,8 +58,10 @@ public class UserAccount implements Serializable {
     @Size(min = 1, max = 10)
     @Column(name = "profile")
     private String profile;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userAccountIduserAccount")
-    private Collection<HistoryLogging> historyLoggingCollection;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "id_user")
+    private int idUser;
 
     public UserAccount() {
     }
@@ -69,11 +70,12 @@ public class UserAccount implements Serializable {
         this.iduserAccount = iduserAccount;
     }
 
-    public UserAccount(Integer iduserAccount, String username, String passwd, String profile) {
+    public UserAccount(Integer iduserAccount, String username, String passwd, String profile, int idUser) {
         this.iduserAccount = iduserAccount;
         this.username = username;
         this.passwd = passwd;
         this.profile = profile;
+        this.idUser = idUser;
     }
 
     public Integer getIduserAccount() {
@@ -108,13 +110,12 @@ public class UserAccount implements Serializable {
         this.profile = profile;
     }
 
-    @XmlTransient
-    public Collection<HistoryLogging> getHistoryLoggingCollection() {
-        return historyLoggingCollection;
+    public int getIdUser() {
+        return idUser;
     }
 
-    public void setHistoryLoggingCollection(Collection<HistoryLogging> historyLoggingCollection) {
-        this.historyLoggingCollection = historyLoggingCollection;
+    public void setIdUser(int idUser) {
+        this.idUser = idUser;
     }
 
     @Override

@@ -14,15 +14,16 @@ import javax.ejb.Local;
  *
  * @author rockerW7
  */
-
 @Local
-public interface IUserAccounts {
+public interface IUserAccountBean {
     
     public List<UserAccount> getAll();
     
-    public void create( UserAccount userAccount );
+    public int getSize();
     
-    public void update( UserAccount userAccount );
+    public void add( String username, String passwd, String profile );
     
-    public void delete( UserAccount userAccount );
+    public void update( Integer idUserAccount );
+    
+    public void remove( UserAccount userAccount );    
 }

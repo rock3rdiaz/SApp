@@ -7,7 +7,7 @@
 package com.comfenalcoquindio.admin.sapp.entity;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author rockerW7
  */
 @Entity
-@Table(name = "product", catalog = "sapp", schema = "")
+@Table(name = "product")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p"),
@@ -79,9 +79,9 @@ public class Product implements Serializable {
         @JoinColumn(name = "product_idproduct", referencedColumnName = "idproduct")}, inverseJoinColumns = {
         @JoinColumn(name = "provider_idprovider", referencedColumnName = "idprovider")})
     @ManyToMany
-    private Collection<Provider> providerCollection;
+    private List<Provider> providerList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
-    private Collection<Order1> order1Collection;
+    private List<Order1> order1List;
 
     public Product() {
     }
@@ -155,21 +155,21 @@ public class Product implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Provider> getProviderCollection() {
-        return providerCollection;
+    public List<Provider> getProviderList() {
+        return providerList;
     }
 
-    public void setProviderCollection(Collection<Provider> providerCollection) {
-        this.providerCollection = providerCollection;
+    public void setProviderList(List<Provider> providerList) {
+        this.providerList = providerList;
     }
 
     @XmlTransient
-    public Collection<Order1> getOrder1Collection() {
-        return order1Collection;
+    public List<Order1> getOrder1List() {
+        return order1List;
     }
 
-    public void setOrder1Collection(Collection<Order1> order1Collection) {
-        this.order1Collection = order1Collection;
+    public void setOrder1List(List<Order1> order1List) {
+        this.order1List = order1List;
     }
 
     @Override

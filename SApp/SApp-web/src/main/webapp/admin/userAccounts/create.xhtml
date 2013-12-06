@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../WEB-INF/facelets/templates/mainTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="welcomeMessage">
+        welcomeMessage
+    </ui:define>
+
+    <ui:define name="menu">
+        menu
+    </ui:define>
+
+    <ui:define name="content">
+
+        <h:form id="form"> 
+            
+            <p:growl id="message"/>
+
+            <p:panelGrid columns="2">  
+                <f:facet name="header">  
+                    Nueva cuenta de usuario  
+                </f:facet>  
+
+                <h:outputLabel for="username" value="Nombre de usuario *" />  
+                <p:inputText id="username" value="#{userAccountController.username}" 
+                             label="Nombre de usuario" required="true"/>  
+
+                <h:outputLabel for="passwd" value="Contraseña de usuario: *" />  
+                <p:inputText id="passwd" value="#{userAccountController.passwd}" 
+                             required="true" label="Contraseña de usuario"/>  
+
+                <h:outputLabel for="profile" value="Perfil del usuario: *" />  
+                <p:inputText id="profile" value="#{userAccountController.profile}" 
+                             required="true" label="Perfil del usuario"/>  
+
+                <f:facet name="footer">  
+                    <p:commandButton value="Guardar"
+                                     actionListener="#{userAccountController.save}"
+                                     update="message"/> 
+                </f:facet>  
+            </p:panelGrid>  
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>
