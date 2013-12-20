@@ -7,7 +7,9 @@
 package com.comfenalcoquindio.admin.sapp.entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,10 +17,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -33,16 +37,16 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "UserAccount.findByUsername", query = "SELECT u FROM UserAccount u WHERE u.username = :username"),
     @NamedQuery(name = "UserAccount.findByPasswd", query = "SELECT u FROM UserAccount u WHERE u.passwd = :passwd"),
     @NamedQuery(name = "UserAccount.findByProfile", query = "SELECT u FROM UserAccount u WHERE u.profile = :profile"),
+    @NamedQuery(name = "UserAccount.findByUsernameAndPasswd", query = "SELECT u FROM UserAccount u WHERE u.username = :username AND u.passwd = :passwd"),
     @NamedQuery(name = "UserAccount.findByIdUser", query = "SELECT u FROM UserAccount u WHERE u.idUser = :idUser")})
 public class UserAccount implements Serializable {
-    
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "iduser_account")
-    private Integer iduserAccount;
     
+    @Id
+    @Basic(optional = false)    
+    @Column(name = "iduser_account") 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer iduserAccount;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -55,13 +59,14 @@ public class UserAccount implements Serializable {
     private String passwd;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 10)
     @Column(name = "profile")
-    private String profile;
+    private int profile;
     @Basic(optional = false)
     @NotNull
     @Column(name = "id_user")
     private int idUser;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userAccountIduserAccount")
+    private List<HistoryLogging> historyLoggingList;
 
     public UserAccount() {
     }
@@ -70,7 +75,7 @@ public class UserAccount implements Serializable {
         this.iduserAccount = iduserAccount;
     }
 
-    public UserAccount(Integer iduserAccount, String username, String passwd, String profile, int idUser) {
+    public UserAccount(Integer iduserAccount, String username, String passwd, int profile, int idUser) {
         this.iduserAccount = iduserAccount;
         this.username = username;
         this.passwd = passwd;
@@ -102,11 +107,11 @@ public class UserAccount implements Serializable {
         this.passwd = passwd;
     }
 
-    public String getProfile() {
+    public int getProfile() {
         return profile;
     }
 
-    public void setProfile(String profile) {
+    public void setProfile(int profile) {
         this.profile = profile;
     }
 
@@ -116,6 +121,15 @@ public class UserAccount implements Serializable {
 
     public void setIdUser(int idUser) {
         this.idUser = idUser;
+    }
+
+    @XmlTransient
+    public List<HistoryLogging> getHistoryLoggingList() {
+        return historyLoggingList;
+    }
+
+    public void setHistoryLoggingList(List<HistoryLogging> historyLoggingList) {
+        this.historyLoggingList = historyLoggingList;
     }
 
     @Override
@@ -140,7 +154,31 @@ public class UserAccount implements Serializable {
 
     @Override
     public String toString() {
-        return "com.comfenalcoquindio.admin.sapp.entity.UserAccount[ iduserAccount=" + iduserAccount + " ]";
+        return "com.comfenalcoquindio.admin.sapp.entity.UserAccount[ iduserAccount=" + iduserAccount + ","
+                + " username=" + username + ", passwd=" + passwd + ", profile=" + profile  + ", idUser=" + idUser + " ]";
     }
     
+    /**
+     *@Summary: Metodo que retorna el nombre del perfil de acuerdo al codigo del mismo
+     * @return name: Nombre del perfil
+     */
+    public String getProfileName(){
+        
+        String name;
+        
+        switch( profile ){
+            case 1:
+                name = "Jefe de area";
+                break;
+            case 2:
+                name = "Coordinador de compras";
+                break;
+            case 3:
+                name = "Miembro de comite de compas";
+                break;
+            default:
+                name = "Administrador";                
+        }        
+        return name;
+    }
 }

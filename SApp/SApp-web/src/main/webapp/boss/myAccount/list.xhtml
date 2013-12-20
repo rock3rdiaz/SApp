@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../WEB-INF/facelets/templates/mainTemplate.xhtml"
+                xmlns:ezcomp="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="welcomeMessage">
+        <!-- Mensage de bienvenida autoconfigurable -->
+        <ezcomp:welcomeMessage 
+            user_name="#{session.getAttribute( 'bossName' )}" 
+            area_name="#{session.getAttribute( 'areaName' )}" />
+    </ui:define>
+
+    <ui:define name="menu">
+        <h:form>  
+
+            <p:growl id="messages_menu"/> 
+
+            <p:menu model="#{menuBeanBoss.model}"/>  
+
+        </h:form> 
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="form"> 
+
+            <p:growl id="messages" showDetail="true"/>
+
+            <p:panelGrid columns="2">  
+                <f:facet name="header">  
+                    #{bundle.t_my_user_account}
+                </f:facet> 
+
+                <h:outputLabel for="username" value="#{bundle.l_username} *" />  
+                <p:inputText id="username" value="#{userAccountController
+                                                    .getMyUserAccount(session.getAttribute('idUser')).username}" 
+                             required="true"                             
+                             requiredMessage="#{bundle.e_username}"/>  
+
+                <h:outputLabel for="passwd" value="#{bundle.l_passwd} *" />  
+                <p:inputText id="passwd" value="#{userAccountController
+                                                  .getMyUserAccount(session.getAttribute('idUser')).passwd}" 
+                             required="true"
+                             requiredMessage="#{bundle.e_passwd}"/>  
+
+                <h:outputLabel for="profile" value="#{bundle.l_profile}" />  
+                <p:selectOneMenu value="#{userAccountController
+                                          .getMyUserAccount(session.getAttribute('idUser')).profileName}" 
+                                 id="profile" required="true"                                
+                                 requiredMessage="#{bundle.e_profile}"
+                                 editable="true">  
+                    <f:selectItem itemLabel="-- Seleccione un rol disponible --" itemValue="" />  
+                    <f:selectItem itemLabel="Administrador" itemValue="4" />  
+                    <f:selectItem itemLabel="Jefe de area" itemValue="1" />  
+                    <f:selectItem itemLabel="Coordinador de compras" itemValue="2" />  
+                    <f:selectItem itemLabel="Miembro de comite de compras" itemValue="3" />  
+                </p:selectOneMenu> 
+
+                <f:facet name="footer">  
+                    <p:commandButton value="#{bundle.b_save}"
+                                     icon="ui-icon-disk"
+                                     actionListener="#{userAccountController.onEditMyAccount}"
+                                     update=":form:messages"/> 
+                </f:facet>  
+            </p:panelGrid>  
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

@@ -9,6 +9,6 @@
         <resource-bundle>
             <base-name>/messages_es</base-name>
             <var>bundle</var>
-        </resource-bundle>
+        </resource-bundle>       
     </application>
 </faces-config>

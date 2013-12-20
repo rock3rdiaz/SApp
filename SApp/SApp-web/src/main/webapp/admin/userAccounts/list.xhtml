@@ -17,7 +17,7 @@
     <ui:define name="menu">
         <h:form>  
 
-            <p:growl id="messages"/> 
+            <p:growl id="messages" showDetail="true"/> 
 
             <p:menu model="#{menuBeanAdmin.model}"/>  
 
@@ -26,37 +26,89 @@
 
     <ui:define name="content">
 
-        <h:form>  
-            <p:dataTable var="userAccounts" value="#{userAccountController.userAccounts}"
+        <h:form id="form">  
+
+            <p:growl id="messages" showDetail="true"/>  
+
+            <p:dataTable id="userAccountTable" var="userAccount"
+                         value="#{userAccountController.userAccountsList}" 
+                         editable="true"
                          paginator="true" rows="10"
-                         editable="true" editMode="cell">  
+                         emptyMessage="No existen registros">
 
-                <f:facet name="header">  
-                    Listado de cuentas de usuario  
-                </f:facet>  
+                <f:facet name="header">
+                    Cuentas de usuario existentes
+                </f:facet>
 
-                <p:column headerText="Nombre de usuario"
-                          sortBy="username">  
-                    <h:outputText value="#{userAccounts.username}" />  
-                </p:column>  
+                <p:ajax event="rowEdit" listener="#{userAccountController.onEdit}" 
+                        update=":form:messages" />  
+                <p:ajax event="rowEditCancel" listener="#{userAccountController.onCancel}" 
+                        update=":form:messages" />                 
 
-                <p:column headerText="Contraseña">  
-                    <h:outputText value="#{userAccounts.passwd}" />  
-                </p:column>  
+                <p:column headerText="Nombre cuenta">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{userAccount.username}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{userAccount.username}"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
 
-                <p:column headerText="Perfil">  
-                    <h:outputText value="#{userAccounts.profile}" />  
-                </p:column>  
+                <p:column headerText="Contraseña cuenta">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{userAccount.passwd}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{userAccount.passwd}"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
 
-                <p:column headerText="idUser">  
-                    <h:outputText value="#{userAccounts.idUser}" />  
-                </p:column>  
+                <p:column headerText="Perfil cuenta">
+                    <p:cellEditor>  
+                        <f:facet name="output">
+                            <h:outputText value="#{userAccount.profileName}" />
+                        </f:facet>  
+                        <f:facet name="input">  
+                            <p:selectOneMenu value="#{userAccount.profile}" required="true">  
+                                <f:selectItem itemLabel="Administrador" itemValue="4" />  
+                                <f:selectItem itemLabel="Jefe de area" itemValue="1" />  
+                                <f:selectItem itemLabel="Coordinador de compras" itemValue="2" />  
+                                <f:selectItem itemLabel="Miembro de comite de compras" itemValue="3" />  
+                            </p:selectOneMenu>  
+                        </f:facet>  
+                    </p:cellEditor> 
+                </p:column>
 
-                <f:facet name="footer">  
-                    En total existen #{userAccountController.userAccounts.size()} cuentas de usuario.  
-                </f:facet> 
-                
-            </p:dataTable>  
+                <p:column>  
+                    <p:rowEditor />  
+                    <p:commandButton id="btnDelete"
+                                     type="button"
+                                     onclick="PF('deleteConfirmation').show();"                                     
+                                     icon="ui-icon-trash"
+                                     style="width:20%"                                     
+                                     title="Eliminar registro"/>
+
+                    <p:confirmDialog widgetVar="deleteConfirmation" 
+                                     message="¿Desea eliminar este registo?"
+                                     header="SApp">  
+                        <p:commandButton id="yesDelete"
+                                         value="Si"                                          
+                                         actionListener="#{userAccountController.onDelete(userAccount)}"
+                                         onsuccess="deleteConfirmation.hide();"
+                                         update=":form:userAccountTable, :form:messages"/>
+                        <p:commandButton id="noDelete"
+                                         value="No"
+                                         onclick="deleteConfirmation.hide();"/>
+                    </p:confirmDialog>
+
+                </p:column> 
+
+            </p:dataTable> 
+
         </h:form> 
 
     </ui:define>

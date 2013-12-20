@@ -30,56 +30,52 @@ public class MenuBeanAdmin {
     public MenuBeanAdmin() {
 
         model = new DefaultMenuModel();
-        
-        DefaultSubMenu home = new DefaultSubMenu( "Home" );
-        
-        DefaultMenuItem notes = new DefaultMenuItem( "Notas importantes" );
-        notes.setIcon( "ui-icon-plus" );        
-        DefaultMenuItem statistics = new DefaultMenuItem( "Estadisticas generales" );
-        statistics.setIcon( "ui-icon-plus" );        
-        DefaultMenuItem upcomingMeetings = new DefaultMenuItem( "Proximas reuniones" );
-        upcomingMeetings.setIcon( "ui-icon-plus" );
-        
-        home.addElement( notes );
-        home.addElement( statistics );
-        home.addElement( upcomingMeetings );
-        
-        model.addElement( home );
-        
+
+        //Submenu de opciones varias
+        DefaultSubMenu home = new DefaultSubMenu("Home");
+
+        DefaultMenuItem notes = new DefaultMenuItem("Notas importantes");
+        notes.setIcon("ui-icon-plus");
+        DefaultMenuItem statistics = new DefaultMenuItem("Estadisticas generales");
+        statistics.setIcon("ui-icon-plus");
+        DefaultMenuItem upcomingMeetings = new DefaultMenuItem("Proximas reuniones");
+        upcomingMeetings.setIcon("ui-icon-plus");
+        home.addElement(notes);
+        home.addElement(statistics);
+        home.addElement(upcomingMeetings);
+
+        model.addElement(home);
+
         //Submenu de cuentas de usuario  
         DefaultSubMenu userAccounts = new DefaultSubMenu("Cuentas de usuario");
 
-        DefaultMenuItem item = new DefaultMenuItem("Listar cuenta de usuario");
-        item.setIcon("ui-icon-plus");        
-        item.setUrl("./userAccounts/list.xhtml");
-        item.setAjax(true);
-        userAccounts.addElement(item);
+        DefaultMenuItem new_count = new DefaultMenuItem("Crear cuenta de usuario");
+        new_count.setIcon("ui-icon-plus");
+        new_count.setUrl("/faces/admin/userAccounts/create.xhtml");
+
+        userAccounts.addElement(new_count);
+        DefaultMenuItem userList = new DefaultMenuItem("Listar cuenta de usuario");
+        userList.setIcon("ui-icon-plus");
+        userList.setUrl("/faces/admin/userAccounts/list.xhtml");
+        userAccounts.addElement(userList);
 
         model.addElement(userAccounts);
 
         //Submenu de fechas de comite de compras  
         DefaultSubMenu datesComitte = new DefaultSubMenu("Fechas del comite de compras");
 
-        item = new DefaultMenuItem("Listar fechas de reunion del comite");
-        item.setIcon("ui-icon-calendar");
-        //item.setCommand("#{menuBeanBoss.save}");
-        item.setUpdate("messages");
-        datesComitte.addElement(item);
-
-        /*item = new DefaultMenuItem("Delete");
-        item.setIcon("ui-icon-close");
-        item.setCommand("#{menuBeanBoss.delete}");
-        item.setAjax(false);
-        datesComitte.addElement(item);
-
-        item = new DefaultMenuItem("Redirect");
-        item.setIcon("ui-icon-search");
-        item.setCommand("#{menuBeanBoss.redirect}");
-        secondSubmenu.addElement(item);*/
-
+        DefaultMenuItem create = new DefaultMenuItem("Crear fecha de reunion");
+        create.setIcon("ui-icon-plus");
+        create.setUrl( "/faces/admin/committeMeeting/create.xhtml" );
+        datesComitte.addElement(create);
+        DefaultMenuItem meetingList = new DefaultMenuItem("Listar fechas de reunion del comite");
+        meetingList.setIcon("ui-icon-calendar");
+        meetingList.setUrl( "/faces/admin/committeMeeting/list.xhtml" );
+        datesComitte.addElement(meetingList);        
+        
         model.addElement(datesComitte);
     }
-    
+
     public MenuModel getModel() {
         return model;
     }
@@ -97,7 +93,7 @@ public class MenuBeanAdmin {
     }
 
     public String redirect() {
-        return "home?faces-redirect=true";
+        return "home?faces-redirect=true";  
     }
 
     public void addMessage(String summary) {

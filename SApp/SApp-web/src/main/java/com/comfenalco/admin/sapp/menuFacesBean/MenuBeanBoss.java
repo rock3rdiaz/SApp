@@ -6,8 +6,6 @@
 package com.comfenalco.admin.sapp.menuFacesBean;
 
 import javax.enterprise.context.RequestScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
@@ -18,71 +16,42 @@ import org.primefaces.model.menu.MenuModel;
  *
  * @author rockerW7
  */
-@Named
+@Named(value = "menuBeanBoss")
 @RequestScoped
 public class MenuBeanBoss {
 
     private MenuModel model;
 
     public MenuBeanBoss() {
-        
+
         model = new DefaultMenuModel();
 
-        //First submenu  
-        DefaultSubMenu firstSubmenu = new DefaultSubMenu("Menu de opciones");
+        //Menu 'Mi cuenta' 
+        DefaultSubMenu myAccount = new DefaultSubMenu("Mi cuenta");
+        DefaultMenuItem myData = new DefaultMenuItem("Mis datos de perfil");
+        myData.setUrl("/faces/boss/myAccount/list.xhtml");
+        myData.setIcon("ui-icon-home");
+        myAccount.addElement(myData);
 
-        DefaultMenuItem item = new DefaultMenuItem("External");
-        item.setUrl("http://www.primefaces.org");
-        //item.setIcon("ui-icon-home");
-        firstSubmenu.addElement(item);
+        model.addElement(myAccount);
 
-        model.addElement(firstSubmenu);
+        //Menu 'Solicitudes de compra'  
+        DefaultSubMenu purchaseRequest = new DefaultSubMenu("Mis solicitudes de compra");
 
-        //Second submenu  
-        DefaultSubMenu secondSubmenu = new DefaultSubMenu("Dynamic Actions");
+        DefaultMenuItem create = new DefaultMenuItem("Crear solicitud de compra");
+        //create.setUrl("");
+        create.setIcon("ui-icon-plus");
+        purchaseRequest.addElement(create);
 
-        item = new DefaultMenuItem("Save");
-        item.setIcon("ui-icon-disk");
-        item.setCommand("#{menuBeanBoss.save}");
-        item.setUpdate("messages");
-        secondSubmenu.addElement(item);
+        DefaultMenuItem list = new DefaultMenuItem("Listar solicitudes realizadas");
+        list.setUrl("/faces/boss/purchaseRequests/list.xhtml");
+        list.setIcon("ui-icon-search");
+        purchaseRequest.addElement(list);
 
-        item = new DefaultMenuItem("Delete");
-        item.setIcon("ui-icon-close");
-        item.setCommand("#{menuBeanBoss.delete}");
-        item.setAjax(false);
-        secondSubmenu.addElement(item);
-
-        item = new DefaultMenuItem("Redirect");
-        item.setIcon("ui-icon-search");
-        item.setCommand("#{menuBeanBoss.redirect}");
-        secondSubmenu.addElement(item);
-
-        model.addElement(secondSubmenu);
+        model.addElement(purchaseRequest);
     }
 
     public MenuModel getModel() {
         return model;
-    }
-
-    public void save() {
-        addMessage("Data saved");
-    }
-
-    public void update() {
-        addMessage("Data updated");
-    }
-
-    public void delete() {
-        addMessage("Data deleted");
-    }
-
-    public String redirect() {
-        return "home?faces-redirect=true";
-    }
-
-    public void addMessage(String summary) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, null);
-        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 }

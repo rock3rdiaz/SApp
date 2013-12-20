@@ -5,55 +5,67 @@
  */
 package com.comfenalco.admin.sapp.controller;
 
+import com.comfenalcoquindio.admin.sapp.bussines.IAreaManagersBean;
 import com.comfenalcoquindio.admin.sapp.bussines.IUserAccountBean;
+import com.comfenalcoquindio.admin.sapp.entity.AreaManagers;
 import com.comfenalcoquindio.admin.sapp.entity.UserAccount;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import org.primefaces.event.RowEditEvent;
 
 /**
  *
  * @author rockerW7
  */
 @Named(value = "userAccountController")
-@RequestScoped
+@SessionScoped
 public class UserAccountController implements Serializable {
 
     @EJB
     private IUserAccountBean userAccountBean;
+    @EJB
+    private IAreaManagersBean areaManagers;
 
-    private Integer idUserAccount;
+    private Integer iduserAccount;
     private String username;
     private String passwd;
-    private String profile;
+    private int profile;
     private int idUser;
-    
-    private List<UserAccount> userAcconts;
+
+    private UserAccount myUserAccount;
+
+    private List<UserAccount> userAccountsList;
+    private List<AreaManagers> areaManagersList;
 
     /**
      * Creates a new instance of UserAccountController
      */
     public UserAccountController() {
-    }
-    
-    public List<UserAccount> getUserAccounts(){
-        return userAccountBean.getAll();
-    }
-    
-    public void edit(){
-        userAccountBean.update( idUserAccount );
+        userAccountsList = new ArrayList<>();
     }
 
-    public void save() {
-        
-        userAccountBean.add(username, passwd, profile);
+    public List<AreaManagers> getAreaManagersList() {
+        return areaManagers.getAll();
+    }
 
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, new FacesMessage("Exito", "Hello " + username));
+    public List<UserAccount> getUserAccountsList() {
+
+        if (userAccountsList.isEmpty()) {
+            userAccountsList = userAccountBean.getAll();
+        }
+
+        return userAccountsList;
+    }
+
+    public UserAccount getMyUserAccount(int identification) {
+        myUserAccount = userAccountBean.getByIdUser(identification);
+        return myUserAccount;
     }
 
     public String getUsername() {
@@ -72,11 +84,11 @@ public class UserAccountController implements Serializable {
         this.passwd = passwd;
     }
 
-    public String getProfile() {
+    public int getProfile() {
         return profile;
     }
 
-    public void setProfile(String profile) {
+    public void setProfile(int profile) {
         this.profile = profile;
     }
 
@@ -88,4 +100,110 @@ public class UserAccountController implements Serializable {
         this.idUser = idUser;
     }
 
+    /**
+     * @Summary: Methodo que reinicializa las propiedades del objeto
+     */
+    public void cleaningProperties() {
+
+        username = "";
+        passwd = "";
+        profile = 0;
+        idUser = 0;
+    }
+
+    public void onSave() {
+
+        try {
+            userAccountBean.add(username, passwd, profile, idUser);
+
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    ":)", "Registro guardado con exito!");
+
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+
+            cleaningProperties();
+
+        } catch (Exception e) {
+
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                    ":\'(", "No se pudo guardar el registro! " + e.getCause().getMessage());
+
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }
+
+    public void onDelete(UserAccount userAccount) {
+
+        try {
+            userAccountBean.delete(userAccount);
+
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    ":)", "Registro eliminado con exito!");
+
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } catch (Exception e) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                    ":\'(", "No se pudo eliminar el registro! " + e.getCause().getMessage());
+
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }
+
+    public void onCancel(RowEditEvent event) {
+
+        FacesMessage msg = new FacesMessage(":(", "Actualizacion cancelada");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    /**
+     *
+     * @Summary: Metodo que actualiza el objeto "UserAccount" que ha sido
+     * modificado
+     * @param event: Evento "RowEditEvent" que contiene el objeto modificado
+     */
+    public void onEdit(RowEditEvent event) {
+
+        UserAccount userAccount = (UserAccount) event.getObject();
+
+        try {
+            userAccountBean.update(userAccount);
+
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    ":)",
+                    "La cuenta de usuario \"" + userAccount.getUsername()
+                    + "\" ha sido modificada exitosamente");
+
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+
+        } catch (Exception e) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                    "Error",
+                    e.getCause().toString());
+
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }
+
+    public void onEditMyAccount() {
+
+        try {
+            
+            System.out.println("In onEditMyAccount()");
+            userAccountBean.update(myUserAccount);
+
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    ":)",
+                    "La cuenta de usuario \"" + myUserAccount.getUsername()
+                    + "\" ha sido modificada exitosamente");
+
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+
+        } catch (Exception e) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                    "Error",
+                    e.getCause().toString());
+
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }
 }

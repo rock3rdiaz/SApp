@@ -12,12 +12,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -46,8 +41,8 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Product implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
+    @NotNull
     @Column(name = "idproduct")
     private Integer idproduct;
     @Basic(optional = false)
@@ -60,9 +55,7 @@ public class Product implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "color")
     private String color;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
+    @Size(max = 45)
     @Column(name = "model")
     private String model;
     @Basic(optional = false)
@@ -75,13 +68,10 @@ public class Product implements Serializable {
     private Double width;
     @Column(name = "high")
     private Double high;
-    @JoinTable(name = "provider_has_product", joinColumns = {
-        @JoinColumn(name = "product_idproduct", referencedColumnName = "idproduct")}, inverseJoinColumns = {
-        @JoinColumn(name = "provider_idprovider", referencedColumnName = "idprovider")})
-    @ManyToMany
-    private List<Provider> providerList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
     private List<Order1> order1List;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productIdproduct")
+    private List<Quotation> quotationList;
 
     public Product() {
     }
@@ -90,11 +80,10 @@ public class Product implements Serializable {
         this.idproduct = idproduct;
     }
 
-    public Product(Integer idproduct, String mark, String color, String model, String description) {
+    public Product(Integer idproduct, String mark, String color, String description) {
         this.idproduct = idproduct;
         this.mark = mark;
         this.color = color;
-        this.model = model;
         this.description = description;
     }
 
@@ -155,21 +144,21 @@ public class Product implements Serializable {
     }
 
     @XmlTransient
-    public List<Provider> getProviderList() {
-        return providerList;
-    }
-
-    public void setProviderList(List<Provider> providerList) {
-        this.providerList = providerList;
-    }
-
-    @XmlTransient
     public List<Order1> getOrder1List() {
         return order1List;
     }
 
     public void setOrder1List(List<Order1> order1List) {
         this.order1List = order1List;
+    }
+
+    @XmlTransient
+    public List<Quotation> getQuotationList() {
+        return quotationList;
+    }
+
+    public void setQuotationList(List<Quotation> quotationList) {
+        this.quotationList = quotationList;
     }
 
     @Override

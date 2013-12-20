@@ -21,9 +21,13 @@ public interface IUserAccountBean {
     
     public int getSize();
     
-    public void add( String username, String passwd, String profile );
+    public void add( String username, String passwd, int profile, int idUser );
     
-    public void update( Integer idUserAccount );
+    public void update( UserAccount userAccount );
     
-    public void remove( UserAccount userAccount );    
+    public void delete( UserAccount userAccount );    
+    
+    public UserAccount getByIdUser( int idUser );
+    
+    public UserAccount getByLogin( String username, String passwd );
 }

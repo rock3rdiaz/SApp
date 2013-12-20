@@ -13,9 +13,12 @@
     <!-- IMPLEMENTATION -->
     <cc:implementation>
         <h:outputLabel class="pull-left"
-                       value="Bienvenido #{cc.attrs.user_name}!, j&eacute;fe del &aacute;rea de #{cc.attrs.area_name}"/>
-
-        <h:outputLink class="pull-right">Salir</h:outputLink>  
+                       value="Bienvenido #{cc.attrs.user_name}!, #{cc.attrs.area_name}"/>
+        <h:form>
+            <h:commandLink class="pull-right"
+                           value="#{bundle.lnk_exit}"
+                           actionListener="#{loginController.logout}" />  
+        </h:form>        
     </cc:implementation>
 
 </html>

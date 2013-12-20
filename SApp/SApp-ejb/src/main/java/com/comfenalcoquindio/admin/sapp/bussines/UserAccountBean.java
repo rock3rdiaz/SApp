@@ -19,8 +19,7 @@ import javax.inject.Inject;
 @Stateless
 public class UserAccountBean implements IUserAccountBean{
 
-    @Inject
-    private UserAccountDAO userAccountDAO;
+    @Inject private UserAccountDAO userAccountDAO;
     
     @Override
     public int getSize(){
@@ -33,27 +32,36 @@ public class UserAccountBean implements IUserAccountBean{
     }
 
     @Override
-    public void add(String username, String passwd, String profile) {
+    public void add(String username, String passwd, int profile, int idUser) {
         
-        UserAccount userAccount = new UserAccount();
+        UserAccount userAccount = new UserAccount(); 
         
         userAccount.setUsername(username);
         userAccount.setPasswd(passwd);
         userAccount.setProfile(profile);
-        userAccount.setIdUser(10);
+        userAccount.setIdUser(idUser);
 
         userAccountDAO.add(userAccount);
     }
 
     @Override
-    public void update( Integer idUserAccount ) {
+    public void update( UserAccount userAccount ) {
         
-        UserAccount userAccount = userAccountDAO.findById( idUserAccount );
         userAccountDAO.update( userAccount );
     }
 
     @Override
-    public void remove(UserAccount userAccount) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void delete(UserAccount userAccount) {
+        userAccountDAO.delete(userAccount);
+    }
+
+    @Override
+    public UserAccount getByIdUser(int idUser) {
+        return userAccountDAO.findByIdUser(idUser);
+    }
+
+    @Override
+    public UserAccount getByLogin(String username, String passwd) {
+        return userAccountDAO.getByLogin(username, passwd);
     }
 }
