@@ -28,8 +28,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "AreaManagers.findAll", query = "SELECT a FROM AreaManagers a"),
     @NamedQuery(name = "AreaManagers.findByIdentification", query = "SELECT a FROM AreaManagers a WHERE a.identification = :identification"),
-    @NamedQuery(name = "AreaManagers.findByName", query = "SELECT a FROM AreaManagers a WHERE a.name = :name"),
-    @NamedQuery(name = "AreaManagers.findByDescription", query = "SELECT a FROM AreaManagers a WHERE a.description = :description")})
+    @NamedQuery(name = "AreaManagers.findByWorkerName", query = "SELECT a FROM AreaManagers a WHERE a.workerName = :workerName"),
+    @NamedQuery(name = "AreaManagers.findByPost", query = "SELECT a FROM AreaManagers a WHERE a.post = :post"),
+    @NamedQuery(name = "AreaManagers.findByIdArea", query = "SELECT a FROM AreaManagers a WHERE a.idArea = :idArea"),
+    @NamedQuery(name = "AreaManagers.findByAreaName", query = "SELECT a FROM AreaManagers a WHERE a.areaName = :areaName")})
 public class AreaManagers implements Serializable {
     private static final long serialVersionUID = 1L;
     
@@ -41,13 +43,22 @@ public class AreaManagers implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "name")
-    private String name;
+    @Column(name = "WorkerName")
+    private String workerName;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "description")
-    private String description;
+    @Column(name = "Post")
+    private String post;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "IdArea")
+    private int idArea;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 255)
+    @Column(name = "AreaName")
+    private String areaName;
 
     public AreaManagers() {
     }
@@ -60,20 +71,36 @@ public class AreaManagers implements Serializable {
         this.identification = identification;
     }
 
-    public String getName() {
-        return name;
+    public String getWorkerName() {
+        return workerName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setWorkerName(String workerName) {
+        this.workerName = workerName;
     }
 
-    public String getDescription() {
-        return description;
+    public String getPost() {
+        return post;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setPost(String post) {
+        this.post = post;
+    }
+
+    public int getIdArea() {
+        return idArea;
+    }
+
+    public void setIdArea(int idArea) {
+        this.idArea = idArea;
+    }
+
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
     }
     
 }

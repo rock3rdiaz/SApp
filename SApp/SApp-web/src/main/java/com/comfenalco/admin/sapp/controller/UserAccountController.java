@@ -64,7 +64,10 @@ public class UserAccountController implements Serializable {
     }
 
     public UserAccount getMyUserAccount(int identification) {
-        myUserAccount = userAccountBean.getByIdUser(identification);
+        if( myUserAccount == null ){
+            myUserAccount = userAccountBean.getByIdUser(identification);
+        }
+        
         return myUserAccount;
     }
 
@@ -114,7 +117,8 @@ public class UserAccountController implements Serializable {
     public void onSave() {
 
         try {
-            userAccountBean.add(username, passwd, profile, idUser);
+            userAccountBean.add(username, passwd, profile, idUser);            
+            userAccountsList = userAccountBean.getAll();
 
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
                     ":)", "Registro guardado con exito!");
@@ -184,11 +188,14 @@ public class UserAccountController implements Serializable {
         }
     }
 
-    public void onEditMyAccount() {
+    /**
+     *
+     * @Summary: Metodo que actualiza el objeto "UserAccount" que ha sido
+     * modificado por medio de la propiedad 'myUserAccount' 
+     */
+    public void onEditMyUserAcount() {
 
         try {
-            
-            System.out.println("In onEditMyAccount()");
             userAccountBean.update(myUserAccount);
 
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,

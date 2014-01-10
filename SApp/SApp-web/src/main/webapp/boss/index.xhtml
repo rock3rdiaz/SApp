@@ -9,8 +9,8 @@
     <ui:define name="welcomeMessage">
         <!-- Mensage de bienvenida autoconfigurable -->
         <ezcomp:welcomeMessage 
-            user_name="#{session.getAttribute('bossName')}" 
-            area_name="#{session.getAttribute('areaName')}" />
+            user_name="#{session.getAttribute('workerName')}" 
+            post_name="#{session.getAttribute('postName')}" />
     </ui:define>
 
     <ui:define name="menu">

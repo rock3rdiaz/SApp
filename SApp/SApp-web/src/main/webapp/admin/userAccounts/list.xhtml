@@ -8,10 +8,10 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="welcomeMessage">
-        <!-- Mensage de bienvenida autoconfigurable -->
+        <!-- Mensaje de bienvenida autoconfigurable -->
         <ezcomp:welcomeMessage 
-            user_name="rocker" 
-            area_name="vivienda" />
+            user_name="#{session.getAttribute( 'workerName' )}" 
+            post_name="#{session.getAttribute( 'postName' )}" />
     </ui:define>
 
     <ui:define name="menu">

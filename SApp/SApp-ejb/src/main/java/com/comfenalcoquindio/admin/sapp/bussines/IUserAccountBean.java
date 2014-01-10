@@ -23,6 +23,8 @@ public interface IUserAccountBean {
     
     public void add( String username, String passwd, int profile, int idUser );
     
+    public void save( UserAccount userAccount );
+    
     public void update( UserAccount userAccount );
     
     public void delete( UserAccount userAccount );    

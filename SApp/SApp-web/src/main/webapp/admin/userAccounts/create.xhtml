@@ -8,10 +8,10 @@
                 xmlns:ezcomp="http://xmlns.jcp.org/jsf/composite/ezcomp">
 
     <ui:define name="welcomeMessage">
-        <!-- Mensage de bienvenida autoconfigurable -->
+        <!-- Mensaje de bienvenida autoconfigurable -->
         <ezcomp:welcomeMessage 
-            user_name="rocker" 
-            area_name="vivienda" />
+            user_name="#{session.getAttribute( 'workerName' )}" 
+            post_name="#{session.getAttribute( 'postName' )}" />
     </ui:define>
 
     <ui:define name="menu">
@@ -37,13 +37,14 @@
 
                 <h:outputLabel for="worker" value="Funcionario al que asignara la cuenta *" />  
                 <p:selectOneMenu id="worker"
-                                 value="#{userAccountController.idUser}"                                  
+                                 value="#{userAccountController.idUser}"
+                                 filter="true" filterMatchMode="contains"
                                  required="true"                                
                                  requiredMessage="Debe seleccionar un funcionario disponible">  
                     <f:selectItem itemLabel="-- Seleccione un jefe de area --" itemValue="" />  
                     <f:selectItems value="#{userAccountController.areaManagersList}"
                                    var="areaManager"
-                                   itemLabel="#{areaManager.name}"
+                                   itemLabel="#{areaManager.workerName}"
                                    itemValue="#{areaManager.identification}"/>  
                 </p:selectOneMenu>
 

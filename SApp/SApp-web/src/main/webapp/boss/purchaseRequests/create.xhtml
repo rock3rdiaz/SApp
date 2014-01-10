@@ -1,0 +1,290 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./../../WEB-INF/facelets/templates/mainTemplate.xhtml"
+                xmlns:ezcomp="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="welcomeMessage">
+        <!-- Mensaje de bienvenida autoconfigurable -->
+        <ezcomp:welcomeMessage 
+            user_name="#{session.getAttribute( 'workerName' )}" 
+            post_name="#{session.getAttribute( 'postName' )}" />
+    </ui:define>
+
+    <ui:define name="menu">
+        <h:form>  
+
+            <p:growl id="messages_menu"/> 
+
+            <p:menu model="#{menuBeanBoss.model}"/>  
+
+        </h:form> 
+    </ui:define>
+
+    <ui:define name="content">
+
+        <p:tabView id="tabView">  
+
+            <p:tab id="newItem" title="#{bundle.t_new_item_purchase_requets}" >  
+
+                <h:form id="formNewItem">
+
+                    <p:growl id="messagesNewItem" showDetail="true"/>
+
+                    <h:panelGrid columns="4">  
+
+                        <h:outputLabel for="description" value="#{bundle.l_description} *" style="color: white"/>  
+                        <p:inputText id="description" value="#{productController.description}" 
+                                     label="#{bundle.l_description}"
+                                     required="true"
+                                     requiredMessage="#{bundle.e_description}"/> 
+
+                        <h:outputLabel for="model" value="#{bundle.l_model}" style="color: white"/>  
+                        <p:inputText id="model" value="#{productController.model}" 
+                                     label="#{bundle.l_model}"
+                                     required="false"/> 
+
+                        <h:outputLabel for="mark" value="#{bundle.l_mark} *" style="color: white"/>  
+                        <p:inputText id="mark" value="#{productController.mark}" 
+                                     label="#{bundle.l_mark}"
+                                     required="true"
+                                     requiredMessage="#{bundle.e_mark}"/> 
+
+                        <h:outputLabel for="color" value="#{bundle.l_color} *" style="color: white" />  
+                        <p:inputText id="color" value="#{productController.color}" 
+                                     label="#{bundle.l_color}"
+                                     required="true"
+                                     requiredMessage="#{bundle.e_color}"/> 
+
+                        <h:outputLabel for="width" value="#{bundle.l_width}" style="color: white"/>  
+                        <p:inputText id="width" value="#{productController.width}" 
+                                     label="#{bundle.l_width}"
+                                     required="false"/> 
+
+                        <h:outputLabel for="high" value="#{bundle.l_high}" style="color: white"/>  
+                        <p:inputText id="high" value="#{productController.high}" 
+                                     label="#{bundle.l_high}"
+                                     required="false"/> 
+
+                        <h:outputLabel for="type" value="#{bundle.l_type} *" style="color: white"/> 
+                        <p:selectOneMenu value="#{orderController.type}" 
+                                         id="type" required="true"                                
+                                         requiredMessage="#{bundle.e_type}">  
+                            <f:selectItem itemLabel="-- Seleccione --" itemValue="" />  
+                            <f:selectItem itemLabel="Gasto" itemValue="1"/>  
+                            <f:selectItem itemLabel="Inversion" itemValue="2" />  
+                            <f:selectItem itemLabel="Adecuacion" itemValue="3" />
+                        </p:selectOneMenu>
+
+
+                        <h:outputLabel for="justification" value="#{bundle.l_justification} *" style="color: white"/>  
+                        <p:inputText id="justification" value="#{orderController.justification}" 
+                                     label="#{bundle.l_justification}"
+                                     required="true"
+                                     requiredMessage="#{bundle.e_justification}"/> 
+
+                        <h:outputLabel for="needDate" value="#{bundle.l_needDate} *" style="color: white"/>  
+                        <p:calendar value="#{orderController.needDate}"
+                                    pattern="yyyy-MM-dd"
+                                    id="needDate" 
+                                    pages="3"
+                                    effect="fadeIn"
+                                    required="true"
+                                    requiredMessage="#{bundle.e_needDate}">
+                            <f:convertDateTime pattern="yyyy-MM-dd"/>  
+                        </p:calendar>
+
+                        <h:outputLabel for="amount" value="#{bundle.l_amount} *" style="color: white"/>  
+                        <p:inputText id="amount" value="#{orderController.amount}" 
+                                     label="#{bundle.l_amount}"
+                                     required="true"
+                                     requiredMessage="#{bundle.e_amount}"/> 
+
+
+                        <f:facet name="footer">  
+                            <p:commandButton id="btnAdd"
+                                             value="#{bundle.b_addItem}" 
+                                             icon="ui-icon-plus" 
+                                             actionListener="#{purchaseRequestController.onAdd}"
+                                             update=":tabView:formNewItem:messagesNewItem, :tabView"/>  
+                        </f:facet> 
+
+                    </h:panelGrid> 
+
+                </h:form>
+
+            </p:tab>  
+
+            <p:tab id="allItems" title="#{bundle.t_all_item_purchase_requets}">  
+
+                <h:form id="formAllItems">
+
+                    <p:growl id="messagesAllItems" showDetail="true"/>
+
+                    <p:dataTable var="product" 
+                                 value="#{productController.productDTOList}" 
+                                 id="productList" editable="true"
+                                 emptyMessage="#{bundle.m_not_records}"
+                                 rowIndexVar="index">  
+
+                        <f:facet name="header">  
+                            #{bundle.t_all_item_purchase_requets}
+                        </f:facet>  
+
+                        <p:ajax event="rowEdit" listener="#{purchaseRequestController.onEdit}" 
+                                update=":tabView:formAllItems:messagesAllItems" />  
+                        <p:ajax event="rowEditCancel" listener="#{purchaseRequestController.onCancel}" 
+                                update=":tabView:formAllItems:messagesAllItems" />  
+
+                        <p:column headerText="#{bundle.l_amount}">  
+                            <p:cellEditor>  
+                                <f:facet name="output">  
+                                    <h:outputText value="#{orderController.orderDTOList.get(index).amount}" />  
+                                </f:facet>  
+                                <f:facet name="input">  
+                                    <p:inputText value="#{orderController.orderDTOList.get(index).amount}" />  
+                                </f:facet>  
+                            </p:cellEditor>  
+                        </p:column>  
+
+                        <p:column headerText="#{bundle.l_mark}">  
+                            <p:cellEditor>  
+                                <f:facet name="output">  
+                                    <h:outputText value="#{product.mark}" />  
+                                </f:facet>  
+                                <f:facet name="input">  
+                                    <p:inputText value="#{product.mark}" />  
+                                </f:facet>  
+                            </p:cellEditor>  
+                        </p:column>  
+
+                        <p:column headerText="#{bundle.l_color}">  
+                            <p:cellEditor>  
+                                <f:facet name="output">  
+                                    <h:outputText value="#{product.color}" />  
+                                </f:facet>  
+                                <f:facet name="input">  
+                                    <p:inputText value="#{product.color}" />  
+                                </f:facet>  
+                            </p:cellEditor>  
+                        </p:column>  
+
+                        <p:column headerText="#{bundle.l_model}">  
+                            <p:cellEditor>  
+                                <f:facet name="output">  
+                                    <h:outputText value="#{product.model}" />  
+                                </f:facet>  
+                                <f:facet name="input">  
+                                    <p:inputText value="#{product.model}" />  
+                                </f:facet> 
+                            </p:cellEditor>  
+                        </p:column> 
+
+                        <p:column headerText="#{bundle.l_width}">  
+                            <p:cellEditor>  
+                                <f:facet name="output">  
+                                    <h:outputText value="#{product.width}" />  
+                                </f:facet>  
+                                <f:facet name="input">  
+                                    <p:inputText value="#{product.width}" />  
+                                </f:facet> 
+                            </p:cellEditor>  
+                        </p:column> 
+
+                        <p:column headerText="#{bundle.l_high}">  
+                            <p:cellEditor>  
+                                <f:facet name="output">  
+                                    <h:outputText value="#{product.high}" />  
+                                </f:facet>  
+                                <f:facet name="input">  
+                                    <p:inputText value="#{product.high}" />  
+                                </f:facet> 
+                            </p:cellEditor>  
+                        </p:column> 
+
+                        <p:column headerText="#{bundle.l_description}">  
+                            <p:cellEditor>  
+                                <f:facet name="output">  
+                                    <h:outputText value="#{product.description}" />  
+                                </f:facet>  
+                                <f:facet name="input">  
+                                    <p:inputText value="#{product.description}" />  
+                                </f:facet> 
+                            </p:cellEditor>  
+                        </p:column> 
+
+                        <p:column headerText="#{bundle.l_justification}">  
+                            <p:cellEditor>  
+                                <f:facet name="output">  
+                                    <h:outputText value="#{orderController.orderDTOList.get(index).justification}" />  
+                                </f:facet>  
+                                <f:facet name="input">  
+                                    <p:inputText value="#{orderController.orderDTOList.get(index).justification}" />  
+                                </f:facet>  
+                            </p:cellEditor>  
+                        </p:column>  
+
+                        <p:column headerText="#{bundle.l_type}">  
+                            <p:cellEditor>  
+                                <f:facet name="output">  
+                                    <h:outputText value="#{orderController.getTypeName( orderController.orderDTOList.get(index).type )}" />  
+                                </f:facet>  
+                                <f:facet name="input"> 
+                                    <p:selectOneMenu value="#{orderController.orderDTOList.get(index).type}" 
+                                                     id="type" required="true"                                
+                                                     requiredMessage="#{bundle.e_type}"> 
+                                        <f:selectItem itemLabel="Gasto" itemValue="1"/>  
+                                        <f:selectItem itemLabel="Inversion" itemValue="2" />  
+                                        <f:selectItem itemLabel="Adecuacion" itemValue="3" />
+                                    </p:selectOneMenu>
+                                </f:facet>  
+                            </p:cellEditor>  
+                        </p:column>  
+
+                        <p:column headerText="#{bundle.l_needDate}">  
+                            <p:cellEditor>  
+                                <f:facet name="output">  
+                                    <h:outputText value="#{orderController.orderDTOList.get(index).needDate}">
+                                        <f:convertDateTime pattern="yyyy-MM-dd"/>  
+                                    </h:outputText>
+                                </f:facet>  
+                                <f:facet name="input"> 
+                                    <p:calendar value="#{orderController.orderDTOList.get(index).needDate}"
+                                                pattern="yyyy-MM-dd"
+                                                id="needDate" 
+                                                pages="3"
+                                                effect="fadeIn"
+                                                required="true"
+                                                requiredMessage="#{bundle.e_needDate}">
+                                        <f:convertDateTime pattern="yyyy-MM-dd"/>  
+                                    </p:calendar>
+                                </f:facet>  
+                            </p:cellEditor>  
+                        </p:column>  
+
+                        <p:column>  
+                            <p:rowEditor />  
+                        </p:column>  
+
+                        <f:facet name="footer">  
+                            <p:commandButton id="btnSave"
+                                             value="#{bundle.b_save}" 
+                                             icon="ui-icon-disk" 
+                                             actionListener="#{purchaseRequestController.onSave}"                                             
+                                             update=":tabView:formAllItems:messagesAllItems, :tabView"/>  
+                        </f:facet>  
+
+                    </p:dataTable>  
+
+                </h:form>  
+
+            </p:tab> 
+
+        </p:tabView>
+
+    </ui:define>
+
+</ui:composition>

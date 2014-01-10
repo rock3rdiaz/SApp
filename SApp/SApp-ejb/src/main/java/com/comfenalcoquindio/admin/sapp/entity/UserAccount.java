@@ -47,11 +47,13 @@ public class UserAccount implements Serializable {
     @Column(name = "iduser_account") 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer iduserAccount;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
     @Column(name = "username")
     private String username;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
@@ -154,9 +156,9 @@ public class UserAccount implements Serializable {
 
     @Override
     public String toString() {
-        return "com.comfenalcoquindio.admin.sapp.entity.UserAccount[ iduserAccount=" + iduserAccount + ","
-                + " username=" + username + ", passwd=" + passwd + ", profile=" + profile  + ", idUser=" + idUser + " ]";
+        return "UserAccount{" + "iduserAccount=" + iduserAccount + ", username=" + username + ", passwd=" + passwd + ", profile=" + profile + ", idUser=" + idUser + ", historyLoggingList=" + historyLoggingList + '}';
     }
+    
     
     /**
      *@Summary: Metodo que retorna el nombre del perfil de acuerdo al codigo del mismo
@@ -174,7 +176,7 @@ public class UserAccount implements Serializable {
                 name = "Coordinador de compras";
                 break;
             case 3:
-                name = "Miembro de comite de compas";
+                name = "Miembro de comite de compras";
                 break;
             default:
                 name = "Administrador";                

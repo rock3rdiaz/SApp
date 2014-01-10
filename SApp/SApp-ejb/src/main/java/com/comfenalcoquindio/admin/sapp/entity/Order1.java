@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.comfenalcoquindio.admin.sapp.entity;
 
 import java.io.Serializable;
@@ -28,7 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author rockerW7
  */
 @Entity
-@Table(name = "order")
+@Table(name = "[order]")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Order1.findAll", query = "SELECT o FROM Order1 o"),
@@ -39,6 +38,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Order1.findByJustification", query = "SELECT o FROM Order1 o WHERE o.justification = :justification"),
     @NamedQuery(name = "Order1.findByAmount", query = "SELECT o FROM Order1 o WHERE o.amount = :amount")})
 public class Order1 implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected Order1PK order1PK;
@@ -59,7 +59,7 @@ public class Order1 implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "amount")
-    private short amount;
+    private int amount;
     @JoinColumn(name = "purchase_request_idpurchase_request", referencedColumnName = "idpurchase_request", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private PurchaseRequest purchaseRequest;
@@ -118,11 +118,11 @@ public class Order1 implements Serializable {
         this.justification = justification;
     }
 
-    public short getAmount() {
+    public int getAmount() {
         return amount;
     }
 
-    public void setAmount(short amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
     }
 
@@ -164,7 +164,9 @@ public class Order1 implements Serializable {
 
     @Override
     public String toString() {
-        return "com.comfenalcoquindio.admin.sapp.entity.Order1[ order1PK=" + order1PK + " ]";
+        return "Order1{" + "order1PK=" + order1PK + ", type=" + type + ", needDate="
+                + needDate + ", justification=" + justification + ", amount="
+                + amount + ", purchaseRequest=" + purchaseRequest + ", product=" + product + '}';
     }
-    
+
 }

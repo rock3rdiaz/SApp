@@ -24,7 +24,7 @@ public class UserAccountBean implements IUserAccountBean{
     @Override
     public int getSize(){
         return userAccountDAO.getSize();
-    }   
+    } 
     
     @Override
     public List<UserAccount> getAll(){
@@ -63,5 +63,10 @@ public class UserAccountBean implements IUserAccountBean{
     @Override
     public UserAccount getByLogin(String username, String passwd) {
         return userAccountDAO.getByLogin(username, passwd);
+    }
+
+    @Override
+    public void save(UserAccount userAccount) {
+        userAccountDAO.add(userAccount);
     }
 }

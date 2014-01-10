@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.comfenalcoquindio.admin.sapp.entity;
 
 import java.io.Serializable;
@@ -12,6 +11,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -39,11 +40,12 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Product.findByWidth", query = "SELECT p FROM Product p WHERE p.width = :width"),
     @NamedQuery(name = "Product.findByHigh", query = "SELECT p FROM Product p WHERE p.high = :high")})
 public class Product implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @NotNull
     @Column(name = "idproduct")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idproduct;
     @Basic(optional = false)
     @NotNull
@@ -183,7 +185,6 @@ public class Product implements Serializable {
 
     @Override
     public String toString() {
-        return "com.comfenalcoquindio.admin.sapp.entity.Product[ idproduct=" + idproduct + " ]";
+        return "Product{" + "idproduct=" + idproduct + ", mark=" + mark + ", color=" + color + ", model=" + model + ", description=" + description + ", width=" + width + ", high=" + high + ", order1List=" + order1List + ", quotationList=" + quotationList + '}';
     }
-    
 }

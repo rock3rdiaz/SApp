@@ -39,7 +39,7 @@ public class MenuBeanBoss {
         DefaultSubMenu purchaseRequest = new DefaultSubMenu("Mis solicitudes de compra");
 
         DefaultMenuItem create = new DefaultMenuItem("Crear solicitud de compra");
-        //create.setUrl("");
+        create.setUrl("/faces/boss/purchaseRequests/create.xhtml");
         create.setIcon("ui-icon-plus");
         purchaseRequest.addElement(create);
 

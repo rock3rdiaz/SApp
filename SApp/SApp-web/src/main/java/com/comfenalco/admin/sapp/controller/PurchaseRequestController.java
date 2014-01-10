@@ -5,11 +5,18 @@
  */
 package com.comfenalco.admin.sapp.controller;
 
+import com.comfenalcoquindio.admin.sapp.bussines.IPurchaseRequestBean;
+import com.comfenalcoquindio.admin.sapp.dto.PurchaseRequestDTO;
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
+import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpSession;
+import org.primefaces.event.RowEditEvent;
 
 /**
  *
@@ -22,16 +29,39 @@ public class PurchaseRequestController implements Serializable {
     private Integer idPurchaseRequest;
     private Date sendDate;
     private String observations;
-    private short state;
-    
-    @Inject private OrderController orderController;
+    private int state;
+    private int idArea;
 
-    @Inject private ProductController productController;
+    private PurchaseRequestDTO purchaseRequestDTO;
+
+    @Inject
+    private OrderController orderController;
+    @Inject
+    private ProductController productController;
+
+    @EJB
+    private IPurchaseRequestBean purchaseRequestBean;
 
     /**
-     * Creates a new instance of PurchaseRequestController
+     * @Summary: Instancia un solo objeto por sesion e inicializa sus
+     * propiedades de manera interna, es decir, sin interaccion con el usuario.
      */
     public PurchaseRequestController() {
+
+        HttpSession session = (HttpSession) FacesContext
+                .getCurrentInstance()
+                .getExternalContext()
+                .getSession(false);
+
+        sendDate = new Date();
+        idArea = (int) session.getAttribute("idArea");
+        state = 3; //3 = 'Por revisar' 
+
+        purchaseRequestDTO = new PurchaseRequestDTO(sendDate, observations, state, idArea);
+    }
+
+    private void updateDTO() {
+        purchaseRequestDTO.setObservations(observations);
     }
 
     /**
@@ -39,15 +69,62 @@ public class PurchaseRequestController implements Serializable {
      * la solicitud de compra (formulario 'create.xhtml')
      */
     public void onAdd() {
-        System.out.println("Clicked in PurchaseRequestController!");
-        
-        orderController.add();
-        /*productController.add();
 
-        System.out.println("OrderList:");
-        for( Order1 order : orderController.getOrderList() ){
-            System.out.println("Order Object: " + order);
-        }*/
+        try {
+
+            productController.add();
+            orderController.add();
+
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    ":)", "Producto adicionado con exito!");
+
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+
+        } catch (Exception e) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                    ":\'(", "No se pudo adicionar el producto! " + e.getCause().getMessage());
+
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }
+
+    public void onSave() {
+
+        updateDTO();
+
+        try {
+            purchaseRequestBean.save(purchaseRequestDTO,
+                    productController.getProductDTOList(), orderController.getOrderDTOList());
+            
+            productController.setProductDTOList();
+            orderController.setOrderDTOList();
+            
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    ":)", "Solicitud de compra registrada con exito!");
+
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } catch (Exception e) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                    ":\'(", "No se pudo registrar la solicitud de compra ! " + e.getCause());
+
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }
+
+    public void onEdit(RowEditEvent event) {
+
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                ":)", "Registro actualizado con exito!");
+
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void onCancel(RowEditEvent event) {
+
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                ":)", "Actualizacion cancelada!");
+
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public Integer getIdPurchaseRequest() {
@@ -62,7 +139,7 @@ public class PurchaseRequestController implements Serializable {
         return sendDate;
     }
 
-    public void setSendDate(Date sendDate) {
+    public void setSendDate(java.sql.Date sendDate) {
         this.sendDate = sendDate;
     }
 
@@ -74,11 +151,11 @@ public class PurchaseRequestController implements Serializable {
         this.observations = observations;
     }
 
-    public short getState() {
+    public int getState() {
         return state;
     }
 
-    public void setState(short state) {
+    public void setState(int state) {
         this.state = state;
     }
 }

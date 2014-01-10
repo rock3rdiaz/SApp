@@ -8,10 +8,10 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="welcomeMessage">
-        <!-- Mensage de bienvenida autoconfigurable -->
+        <!-- Mensaje de bienvenida autoconfigurable -->
         <ezcomp:welcomeMessage 
-            user_name="#{session.getAttribute( 'bossName' )}" 
-            area_name="#{session.getAttribute( 'areaName' )}" />
+            user_name="#{session.getAttribute( 'workerName' )}" 
+            post_name="#{session.getAttribute( 'postName' )}" />
     </ui:define>
 
     <ui:define name="menu">
@@ -36,22 +36,24 @@
 
                 <h:outputLabel for="username" value="#{bundle.l_username} *" />  
                 <p:inputText id="username" value="#{userAccountController
-                                                    .getMyUserAccount(session.getAttribute('idUser')).username}" 
+                                                    .getMyUserAccount(session.getAttribute('identification')).username}" 
                              required="true"                             
                              requiredMessage="#{bundle.e_username}"/>  
 
                 <h:outputLabel for="passwd" value="#{bundle.l_passwd} *" />  
                 <p:inputText id="passwd" value="#{userAccountController
-                                                  .getMyUserAccount(session.getAttribute('idUser')).passwd}" 
+                                                  .getMyUserAccount(session.getAttribute('identification')).passwd}" 
                              required="true"
                              requiredMessage="#{bundle.e_passwd}"/>  
 
                 <h:outputLabel for="profile" value="#{bundle.l_profile}" />  
                 <p:selectOneMenu value="#{userAccountController
-                                          .getMyUserAccount(session.getAttribute('idUser')).profileName}" 
+                                          .getMyUserAccount(session.getAttribute('identification')).profileName}"
+                                          
                                  id="profile" required="true"                                
                                  requiredMessage="#{bundle.e_profile}"
-                                 editable="true">  
+                                 editable="true"
+                                 disabled="true">  
                     <f:selectItem itemLabel="-- Seleccione un rol disponible --" itemValue="" />  
                     <f:selectItem itemLabel="Administrador" itemValue="4" />  
                     <f:selectItem itemLabel="Jefe de area" itemValue="1" />  
@@ -62,7 +64,7 @@
                 <f:facet name="footer">  
                     <p:commandButton value="#{bundle.b_save}"
                                      icon="ui-icon-disk"
-                                     actionListener="#{userAccountController.onEditMyAccount}"
+                                     actionListener="#{userAccountController.onEditMyUserAcount}"
                                      update=":form:messages"/> 
                 </f:facet>  
             </p:panelGrid>  

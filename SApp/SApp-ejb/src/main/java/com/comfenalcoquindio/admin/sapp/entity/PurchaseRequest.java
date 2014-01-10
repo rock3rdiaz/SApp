@@ -8,24 +8,22 @@ package com.comfenalcoquindio.admin.sapp.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -39,36 +37,36 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "PurchaseRequest.findByIdpurchaseRequest", query = "SELECT p FROM PurchaseRequest p WHERE p.idpurchaseRequest = :idpurchaseRequest"),
     @NamedQuery(name = "PurchaseRequest.findBySendDate", query = "SELECT p FROM PurchaseRequest p WHERE p.sendDate = :sendDate"),
     @NamedQuery(name = "PurchaseRequest.findByObservations", query = "SELECT p FROM PurchaseRequest p WHERE p.observations = :observations"),
-    @NamedQuery(name = "PurchaseRequest.findByState", query = "SELECT p FROM PurchaseRequest p WHERE p.state = :state")})
+    @NamedQuery(name = "PurchaseRequest.findByState", query = "SELECT p FROM PurchaseRequest p WHERE p.state = :state"),
+    @NamedQuery(name = "PurchaseRequest.findByIdarea", query = "SELECT p FROM PurchaseRequest p WHERE p.idarea = :idarea")})
 public class PurchaseRequest implements Serializable {
     private static final long serialVersionUID = 1L;
+    
     @Id
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "idpurchase_request")
+    @Basic(optional = false)    
+    @Column(name = "idpurchase_request")    
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idpurchaseRequest;
+    
     @Basic(optional = false)
     @NotNull
     @Column(name = "send_date")
     @Temporal(TemporalType.DATE)
     private Date sendDate;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 120)
+    @Size(max = 120)
     @Column(name = "observations")
     private String observations;
     @Basic(optional = false)
     @NotNull
     @Column(name = "state")
-    private short state;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "purchaseRequest")
-    private List<Order1> order1List;
+    private int state;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "idarea")
+    private int idarea;
     @JoinColumn(name = "purchase_act_idpurchase_act", referencedColumnName = "idpurchase_act")
     @ManyToOne
     private PurchaseAct purchaseActIdpurchaseAct;
-    @JoinColumn(name = "area_idarea", referencedColumnName = "idarea")
-    @ManyToOne(optional = false)
-    private Area areaIdarea;
 
     public PurchaseRequest() {
     }
@@ -77,11 +75,11 @@ public class PurchaseRequest implements Serializable {
         this.idpurchaseRequest = idpurchaseRequest;
     }
 
-    public PurchaseRequest(Integer idpurchaseRequest, Date sendDate, String observations, short state) {
+    public PurchaseRequest(Integer idpurchaseRequest, Date sendDate, int state, int idarea) {
         this.idpurchaseRequest = idpurchaseRequest;
         this.sendDate = sendDate;
-        this.observations = observations;
         this.state = state;
+        this.idarea = idarea;
     }
 
     public Integer getIdpurchaseRequest() {
@@ -108,21 +106,20 @@ public class PurchaseRequest implements Serializable {
         this.observations = observations;
     }
 
-    public short getState() {
+    public int getState() {
         return state;
     }
 
-    public void setState(short state) {
+    public void setState(int state) {
         this.state = state;
     }
 
-    @XmlTransient
-    public List<Order1> getOrder1List() {
-        return order1List;
+    public int getIdarea() {
+        return idarea;
     }
 
-    public void setOrder1List(List<Order1> order1List) {
-        this.order1List = order1List;
+    public void setIdarea(int idarea) {
+        this.idarea = idarea;
     }
 
     public PurchaseAct getPurchaseActIdpurchaseAct() {
@@ -131,14 +128,6 @@ public class PurchaseRequest implements Serializable {
 
     public void setPurchaseActIdpurchaseAct(PurchaseAct purchaseActIdpurchaseAct) {
         this.purchaseActIdpurchaseAct = purchaseActIdpurchaseAct;
-    }
-
-    public Area getAreaIdarea() {
-        return areaIdarea;
-    }
-
-    public void setAreaIdarea(Area areaIdarea) {
-        this.areaIdarea = areaIdarea;
     }
 
     @Override
@@ -163,7 +152,6 @@ public class PurchaseRequest implements Serializable {
 
     @Override
     public String toString() {
-        return "com.comfenalcoquindio.admin.sapp.entity.PurchaseRequest[ idpurchaseRequest=" + idpurchaseRequest + " ]";
+        return "PurchaseRequest{" + "idpurchaseRequest=" + idpurchaseRequest + ", sendDate=" + sendDate + ", observations=" + observations + ", state=" + state + ", idarea=" + idarea + ", purchaseActIdpurchaseAct=" + purchaseActIdpurchaseAct + '}';
     }
-    
 }

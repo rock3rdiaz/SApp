@@ -29,8 +29,10 @@ public class LoginController {
     private String username;
     private String passwd;
 
-    @EJB private IUserAccountBean userAccountBean;
-    @EJB private IAreaManagersBean areaManagersBean;
+    @EJB
+    private IUserAccountBean userAccountBean;
+    @EJB
+    private IAreaManagersBean areaManagersBean;
 
     /**
      * Creates a new instance of LogginController
@@ -62,33 +64,34 @@ public class LoginController {
 
             FacesContext facesContext = FacesContext.getCurrentInstance();
             HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);
-            
+
             session.setAttribute("username", username);
             session.setAttribute("profile", acount.getProfile());
-            session.setAttribute("idUser", acount.getIdUser());
+            session.setAttribute("identification", acount.getIdUser());
             session.setAttribute("idUserAccount", acount.getIduserAccount());
-            session.setAttribute("bossName", areaManager.getName());
-            session.setAttribute("areaName", areaManager.getDescription());
+            session.setAttribute("workerName", areaManager.getWorkerName());
+            session.setAttribute("areaName", areaManager.getAreaName());
+            session.setAttribute("idArea", areaManager.getIdArea());
+            session.setAttribute("postName", areaManager.getPost());
             
-            switch( acount.getProfile() ){
+            switch (acount.getProfile()) {
                 case 1:
                     facesContext.getExternalContext().redirect("faces/boss/index.xhtml");
                     break;
-                    
+
                 case 2:
                     facesContext.getExternalContext().redirect("faces/coordinator/index.xhtml");
                     break;
-                    
+
                 case 3:
                     facesContext.getExternalContext().redirect("faces/committe/index.xhtml");
                     break;
-                    
+
                 default:
                     facesContext.getExternalContext().redirect("faces/admin/index.xhtml");
                     break;
             }
-        } 
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("ERROR!: " + e.getCause());
 
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_FATAL,
@@ -101,11 +104,10 @@ public class LoginController {
     public void logout() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         facesContext.getExternalContext().invalidateSession();
-        
+
         try {
-            facesContext.getExternalContext().redirect( "/SApp-web/faces/login.xhtml" );
-        } 
-        catch (Exception ex) {
+            facesContext.getExternalContext().redirect("/SApp-web/faces/login.xhtml");
+        } catch (Exception ex) {
             Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

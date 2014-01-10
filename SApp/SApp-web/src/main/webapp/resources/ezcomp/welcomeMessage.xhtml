@@ -7,13 +7,13 @@
     <!-- INTERFACE -->
     <cc:interface>
         <cc:attribute name="user_name" />
-        <cc:attribute name="area_name" />
+        <cc:attribute name="post_name" />
     </cc:interface>
 
     <!-- IMPLEMENTATION -->
     <cc:implementation>
         <h:outputLabel class="pull-left"
-                       value="Bienvenido #{cc.attrs.user_name}!, #{cc.attrs.area_name}"/>
+                       value="Bienvenido #{cc.attrs.user_name}!, #{cc.attrs.post_name}"/>
         <h:form>
             <h:commandLink class="pull-right"
                            value="#{bundle.lnk_exit}"

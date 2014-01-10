@@ -83,8 +83,19 @@ public class UserAccountBeanTest {
                 lookup("java:global/classes/UserAccountBean");
 
         try {
-            instance.add("batman", "rockys", 3, 1985);
-
+            
+            UserAccount ua = new UserAccount();
+            ua.setUsername( "superman" );
+            ua.setPasswd( "jocker" );
+            ua.setProfile( 1 );
+            ua.setIdUser( 1094883687 );
+            
+            System.out.println("Before saved: " + ua);
+            
+            instance.save( ua );
+            
+            System.out.println("After saved: " + ua);
+            
             System.out.println("Success!");
         } catch (Exception e) {
             System.out.println("ERROR! " + e.getCause());
